@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealth | LifeEase</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--bg:#050810;
+--card:rgba(255,255,255,0.05);
+--border:rgba(255,255,255,0.1);
+--primary:#00d2ff;
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:white;
+font-family:sans-serif;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:20px;
+border-bottom:1px solid var(--border);
+}
+
+.avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,#00d2ff,#9333ea);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+.profile{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+margin:10px;
+border-radius:10px;
+}
+
+button{
+padding:10px;
+margin-top:10px;
+background:var(--primary);
+border:none;
+color:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+
+<h2>LifeEase Wealth</h2>
+
+<div class="profile">
+
+<div class="avatar" id="avatar">U</div>
+
+<div>
+<div id="userName">User</div>
+<div id="userEmail" style="font-size:12px;color:#94a3b8"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+<div class="card">
+
+<h3>Balance</h3>
+
+<h1 id="balance">₹0</h1>
+
+<input type="number" id="amount" placeholder="Add income">
+
+<button onclick="addIncome()">Add Income</button>
+
+</div>
+
+<div class="card">
+
+<h3>Expenses</h3>
+
+<input type="number" id="expense" placeholder="Add expense">
+
+<button onclick="addExpense()">Add Expense</button>
+
+</div>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+
+<script type="module">
+
+import {
+auth,
+onAuthStateChanged
+}
+from "./firebase.js";
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+const name=user.displayName;
+const email=user.email;
+
+userName.innerText=name;
+userEmail.innerText=email;
+avatar.innerText=name.charAt(0).toUpperCase();
+
+}
+
+});
+
+let balance=0;
+let income=0;
+let expense=0;
+
+function addIncome(){
+
+let amt=parseInt(document.getElementById("amount").value);
+
+income+=amt;
+balance+=amt;
+
+update();
+
+}
+
+function addExpense(){
+
+let amt=parseInt(document.getElementById("expense").value);
+
+expense+=amt;
+balance-=amt;
+
+update();
+
+}
+
+function update(){
+
+document.getElementById("balance").innerText="₹"+balance;
+
+drawChart();
+
+}
+
+function drawChart(){
+
+new Chart(document.getElementById("chart"),{
+
+type:"doughnut",
+
+data:{
+labels:["Income","Expense"],
+datasets:[{
+data:[income,expense],
+backgroundColor:["#00d2ff","#ff4757"]
+}]
+}
+
+});
+
+}
+
+</script>
+
+</body>
+</html>

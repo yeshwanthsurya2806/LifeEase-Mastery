@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - LifeEase</title>
+<style>
+body{
+background:#050810;
+color:white;
+font-family:sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+.box{
+background:rgba(255,255,255,0.05);
+padding:40px;
+border-radius:10px;
+text-align:center;
+}
+button{
+padding:12px 24px;
+font-size:16px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h1>Login</h1>
+<button id="loginBtn">Login with Google</button>
+<p>No account? <a href="signup.html">Signup</a></p>
+</div>
+
+<script type="module">
+
+import { auth, provider, signInWithPopup }
+from "./firebase.js";
+
+loginBtn.onclick = async () => {
+
+try{
+
+await signInWithPopup(auth, provider);
+
+window.location.href="dashboard.html";
+
+}
+catch(error){
+alert(error.message);
+}
+
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health | LifeEase</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--bg:#050810;
+--card:rgba(255,255,255,0.05);
+--border:rgba(255,255,255,0.1);
+--primary:#3b82f6;
+--textDim:#94a3b8;
+}
+
+body{
+margin:0;
+font-family:Inter,sans-serif;
+background:linear-gradient(135deg,#050810,#0f172a);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+border-bottom:1px solid var(--border);
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:var(--primary);
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,#3b82f6,#9333ea);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+/* MAIN */
+
+.container{
+padding:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:10px;
+border:1px solid var(--border);
+margin-bottom:20px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.stat{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+
+<div class="logo">LifeEase Health</div>
+
+<div class="profile">
+
+<div class="avatar" id="avatar">U</div>
+
+<div>
+<div id="userName">User</div>
+<div id="userEmail" style="font-size:12px;color:#94a3b8"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+<h1>Hello, <span id="firstName">User</span> 👋</h1>
+
+<div class="grid">
+
+<div>
+
+<div class="card">
+
+<h3>Calories</h3>
+
+<h1 id="calories">2040 kcal</h1>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h3>Sleep</h3>
+
+<h1>7.5 hrs</h1>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="stats">
+
+<div class="stat">
+Heart Rate
+<h2>68 bpm</h2>
+</div>
+
+<div class="stat">
+Weight
+<h2>76 kg</h2>
+</div>
+
+<div class="stat">
+Steps
+<h2>8421</h2>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import {
+auth,
+onAuthStateChanged
+}
+from "./firebase.js";
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+const name=user.displayName;
+const email=user.email;
+
+userName.innerText=name;
+userEmail.innerText=email;
+avatar.innerText=name.charAt(0).toUpperCase();
+firstName.innerText=name.split(" ")[0];
+
+}
+
+});
+
+new Chart(document.getElementById("chart"),{
+
+type:"line",
+
+data:{
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+datasets:[{
+data:[1800,2000,2100,1900,2200,2400,2040],
+borderColor:"#3b82f6"
+}]
+}
+
+});
+
+</script>
+
+</body>
+</html>
