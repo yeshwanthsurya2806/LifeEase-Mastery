@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wealth | LifeEase</title>
+
+<title>LifeEase Wealth</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -13,187 +14,459 @@
 --bg:#050810;
 --card:rgba(255,255,255,0.05);
 --border:rgba(255,255,255,0.1);
---primary:#00d2ff;
+--accent:#fbbf24;
+--textDim:#94a3b8;
+}
+
+*{
+box-sizing:border-box;
+font-family:Inter, sans-serif;
 }
 
 body{
 margin:0;
 background:var(--bg);
 color:white;
-font-family:sans-serif;
-}
-
-/* NAVBAR */
-
-.navbar{
 display:flex;
-justify-content:space-between;
-padding:20px;
-border-bottom:1px solid var(--border);
 }
 
-.avatar{
-width:40px;
-height:40px;
-border-radius:50%;
-background:linear-gradient(135deg,#00d2ff,#9333ea);
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
+/* SIDEBAR */
+
+.sidebar{
+width:220px;
+background:#020617;
+height:100vh;
+padding:25px;
+border-right:1px solid var(--border);
 }
 
-.profile{
-display:flex;
-gap:10px;
-align-items:center;
+.logo{
+font-size:22px;
+font-weight:700;
+color:var(--accent);
+margin-bottom:30px;
 }
 
-.container{
-padding:20px;
+.sidebar div{
+padding:10px 0;
+cursor:pointer;
+color:#cbd5f5;
+transition:0.3s;
+}
+
+.sidebar div:hover{
+color:var(--accent);
+transform:translateX(5px);
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+/* CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:25px;
 }
 
 .card{
 background:var(--card);
 padding:20px;
-margin:10px;
 border-radius:10px;
+border:1px solid var(--border);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+/* FORMS */
+
+.form-row{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
+
+input,select{
+padding:10px;
+background:#020617;
+border:1px solid var(--border);
+color:white;
+border-radius:5px;
 }
 
 button{
-padding:10px;
-margin-top:10px;
-background:var(--primary);
+padding:10px 16px;
+background:var(--accent);
 border:none;
-color:white;
 cursor:pointer;
+border-radius:5px;
+font-weight:bold;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid var(--border);
+text-align:left;
+}
+
+.chart-box{
+max-width:420px;
+margin-top:20px;
 }
 
 </style>
+
 </head>
+
 <body>
 
-<div class="navbar">
+<div class="sidebar">
 
-<h2>LifeEase Wealth</h2>
+<div class="logo">LifeEase</div>
 
-<div class="profile">
-
-<div class="avatar" id="avatar">U</div>
-
-<div>
-<div id="userName">User</div>
-<div id="userEmail" style="font-size:12px;color:#94a3b8"></div>
-</div>
+<div onclick="showSection('dashboard')">Dashboard</div>
+<div onclick="showSection('expenses')">Expenses</div>
+<div onclick="showSection('investments')">Investments</div>
+<div onclick="showSection('subscriptions')">Subscriptions</div>
+<div onclick="showSection('goals')">Financial Goals</div>
+<div onclick="showSection('analytics')">Analytics</div>
 
 </div>
 
-</div>
+<div class="main">
 
+<!-- DASHBOARD -->
 
-<div class="container">
+<div id="dashboard" class="section active">
+
+<h2>Main Dashboard</h2>
+
+<div class="cards">
 
 <div class="card">
-
-<h3>Balance</h3>
-
-<h1 id="balance">₹0</h1>
-
-<input type="number" id="amount" placeholder="Add income">
-
-<button onclick="addIncome()">Add Income</button>
-
+<h4>Account Balance</h4>
+<h2 id="balance">₹0</h2>
 </div>
 
 <div class="card">
+<h4>Monthly Spending</h4>
+<h2 id="monthlySpend">₹0</h2>
+</div>
 
-<h3>Expenses</h3>
+<div class="card">
+<h4>Investment Value</h4>
+<h2 id="investValue">₹0</h2>
+</div>
 
-<input type="number" id="expense" placeholder="Add expense">
+<div class="card">
+<h4>Goal Progress</h4>
+<h2>75%</h2>
+</div>
 
+</div>
+
+<div class="chart-box">
+<canvas id="pieChart"></canvas>
+</div>
+
+<div class="chart-box">
+<canvas id="barChart"></canvas>
+</div>
+
+</div>
+
+<!-- EXPENSES -->
+
+<div id="expenses" class="section">
+
+<h2>Expenses</h2>
+
+<div class="form-row">
+<input id="amount" placeholder="Amount">
+<input id="category" placeholder="Category">
+<input id="date" type="date">
+<select id="mode">
+<option>UPI</option>
+<option>Card</option>
+<option>Cash</option>
+</select>
 <button onclick="addExpense()">Add Expense</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>S.N</th>
+<th>Date</th>
+<th>Category</th>
+<th>Mode</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody id="expenseTable"></tbody>
+
+</table>
 
 </div>
 
-<canvas id="chart"></canvas>
+<!-- INVESTMENTS -->
+
+<div id="investments" class="section">
+
+<h2>Investments</h2>
+
+<div class="form-row">
+<input id="assetName" placeholder="Asset Name">
+<input id="investAmount" placeholder="Amount">
+<button onclick="addInvestment()">Add</button>
+</div>
+
+<ul id="investList"></ul>
 
 </div>
 
+<!-- SUBSCRIPTIONS -->
 
-<script type="module">
+<div id="subscriptions" class="section">
 
-import {
-auth,
-onAuthStateChanged
-}
-from "./firebase.js";
+<h2>Subscriptions</h2>
 
-onAuthStateChanged(auth,(user)=>{
+<div class="form-row">
+<input id="platform" placeholder="Platform">
+<input id="subAmount" placeholder="Amount">
+<input id="dueDate" type="date">
+<button onclick="addSubscription()">Add Subscription</button>
+</div>
 
-if(user){
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Amount</th>
+<th>Due Date</th>
+<th>Status</th>
+</tr>
+</thead>
 
-const name=user.displayName;
-const email=user.email;
+<tbody id="subTable"></tbody>
 
-userName.innerText=name;
-userEmail.innerText=email;
-avatar.innerText=name.charAt(0).toUpperCase();
+</table>
 
-}
+</div>
 
+<!-- GOALS -->
+
+<div id="goals" class="section">
+
+<h2>Financial Goals</h2>
+
+<div class="form-row">
+<input id="goalName" placeholder="Goal Name">
+<input id="goalAmount" placeholder="Target Amount">
+<button onclick="addGoal()">Add Goal</button>
+</div>
+
+<ul id="goalList"></ul>
+
+</div>
+
+</div>
+
+<script>
+
+/* NAVIGATION */
+
+function showSection(id){
+
+document.querySelectorAll(".section").forEach(s=>{
+s.classList.remove("active");
 });
 
-let balance=0;
-let income=0;
-let expense=0;
-
-function addIncome(){
-
-let amt=parseInt(document.getElementById("amount").value);
-
-income+=amt;
-balance+=amt;
-
-update();
+document.getElementById(id).classList.add("active");
 
 }
+
+/* DATA */
+
+let expenses=[];
+let investments=[];
+let subscriptions=[];
+let goals=[];
+
+/* DASHBOARD UPDATE */
+
+function updateDashboard(){
+
+let balance=0;
+let monthly=0;
+let investTotal=0;
+
+expenses.forEach(e=>{
+balance-=Number(e.amount);
+monthly+=Number(e.amount);
+});
+
+investments.forEach(i=>{
+balance+=Number(i.amount);
+investTotal+=Number(i.amount);
+});
+
+document.getElementById("balance").innerText="₹"+balance;
+document.getElementById("monthlySpend").innerText="₹"+monthly;
+document.getElementById("investValue").innerText="₹"+investTotal;
+
+}
+
+/* EXPENSES */
 
 function addExpense(){
 
-let amt=parseInt(document.getElementById("expense").value);
+let amount=document.getElementById("amount").value;
+let category=document.getElementById("category").value;
+let date=document.getElementById("date").value;
+let mode=document.getElementById("mode").value;
 
-expense+=amt;
-balance-=amt;
+expenses.push({amount,category,date,mode});
 
-update();
-
-}
-
-function update(){
-
-document.getElementById("balance").innerText="₹"+balance;
-
-drawChart();
+renderExpenses();
+updateDashboard();
 
 }
 
-function drawChart(){
+function renderExpenses(){
 
-new Chart(document.getElementById("chart"),{
+let table=document.getElementById("expenseTable");
 
-type:"doughnut",
+table.innerHTML="";
 
-data:{
-labels:["Income","Expense"],
-datasets:[{
-data:[income,expense],
-backgroundColor:["#00d2ff","#ff4757"]
-}]
-}
+expenses.forEach((e,i)=>{
+
+table.innerHTML+=`
+<tr>
+<td>${i+1}</td>
+<td>${e.date}</td>
+<td>${e.category}</td>
+<td>${e.mode}</td>
+<td>₹${e.amount}</td>
+</tr>
+`;
 
 });
 
 }
+
+/* INVESTMENTS */
+
+function addInvestment(){
+
+let name=document.getElementById("assetName").value;
+let amt=document.getElementById("investAmount").value;
+
+investments.push({name,amount:amt});
+
+let li=document.createElement("li");
+li.innerText=name+" - ₹"+amt;
+
+document.getElementById("investList").appendChild(li);
+
+updateDashboard();
+
+}
+
+/* SUBSCRIPTIONS */
+
+function addSubscription(){
+
+let platform=document.getElementById("platform").value;
+let amount=document.getElementById("subAmount").value;
+let due=document.getElementById("dueDate").value;
+
+subscriptions.push({platform,amount,due});
+
+let today=new Date();
+let dueDate=new Date(due);
+
+let status = dueDate >= today ? "Upcoming" : "Paid";
+
+let table=document.getElementById("subTable");
+
+table.innerHTML += `
+<tr>
+<td>${platform}</td>
+<td>₹${amount}</td>
+<td>${due}</td>
+<td>${status}</td>
+</tr>
+`;
+
+}
+
+/* GOALS */
+
+function addGoal(){
+
+let name=document.getElementById("goalName").value;
+let amt=document.getElementById("goalAmount").value;
+
+goals.push({name,amt});
+
+let li=document.createElement("li");
+li.innerText=name+" - Target ₹"+amt;
+
+document.getElementById("goalList").appendChild(li);
+
+}
+
+/* CHARTS */
+
+new Chart(document.getElementById("pieChart"),{
+type:"doughnut",
+data:{
+labels:["Food","Rent","Entertainment"],
+datasets:[{
+data:[4000,8000,2000],
+backgroundColor:["#22c55e","#3b82f6","#f59e0b"]
+}]
+}
+});
+
+new Chart(document.getElementById("barChart"),{
+type:"bar",
+data:{
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+datasets:[{
+data:[12000,9000,14000,8000,10000,15000],
+backgroundColor:"#fbbf24"
+}]
+}
+});
 
 </script>
 
