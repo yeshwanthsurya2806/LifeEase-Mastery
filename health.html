@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Health | LifeEase</title>
+
+<title>LifeEase Health</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -13,60 +15,73 @@
 --bg:#050810;
 --card:rgba(255,255,255,0.05);
 --border:rgba(255,255,255,0.1);
---primary:#3b82f6;
+--accent:#34d399;
 --textDim:#94a3b8;
+}
+
+*{
+box-sizing:border-box;
+font-family:Inter, sans-serif;
 }
 
 body{
 margin:0;
-font-family:Inter,sans-serif;
-background:linear-gradient(135deg,#050810,#0f172a);
+background:var(--bg);
 color:white;
+display:flex;
 }
 
-/* NAVBAR */
+/* SIDEBAR */
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 40px;
-border-bottom:1px solid var(--border);
+.sidebar{
+width:220px;
+background:#020617;
+height:100vh;
+padding:25px;
+border-right:1px solid var(--border);
 }
 
 .logo{
 font-size:22px;
-font-weight:bold;
-color:var(--primary);
+font-weight:700;
+color:var(--accent);
+margin-bottom:30px;
 }
 
-.profile{
-display:flex;
-align-items:center;
-gap:10px;
+.sidebar div{
+padding:10px 0;
+cursor:pointer;
+color:#cbd5f5;
+transition:0.3s;
 }
 
-.avatar{
-width:40px;
-height:40px;
-border-radius:50%;
-background:linear-gradient(135deg,#3b82f6,#9333ea);
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
+.sidebar div:hover{
+color:var(--accent);
+transform:translateX(5px);
 }
 
 /* MAIN */
 
-.container{
+.main{
+flex:1;
 padding:30px;
 }
 
-.grid{
+.section{
+display:none;
+}
+
+.section.active{
+display:block;
+}
+
+/* CARDS */
+
+.cards{
 display:grid;
-grid-template-columns:2fr 1fr;
-gap:20px;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:25px;
 }
 
 .card{
@@ -74,133 +89,270 @@ background:var(--card);
 padding:20px;
 border-radius:10px;
 border:1px solid var(--border);
-margin-bottom:20px;
+transition:0.3s;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
+.card:hover{
+transform:translateY(-5px);
+}
+
+/* FORMS */
+
+.form-row{
+display:flex;
 gap:10px;
+flex-wrap:wrap;
+margin-bottom:15px;
 }
 
-.stat{
-background:var(--card);
-padding:15px;
-border-radius:10px;
-text-align:center;
+input{
+padding:10px;
+background:#020617;
+border:1px solid var(--border);
+color:white;
+border-radius:5px;
+}
+
+button{
+padding:10px 16px;
+background:var(--accent);
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-weight:bold;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid var(--border);
+text-align:left;
+}
+
+/* CHART SIZE */
+
+.chart-box{
+max-width:420px;
+margin-top:20px;
 }
 
 </style>
+
 </head>
+
 <body>
 
-<div class="navbar">
+<div class="sidebar">
 
-<div class="logo">LifeEase Health</div>
+<div class="logo">LifeEase</div>
 
-<div class="profile">
-
-<div class="avatar" id="avatar">U</div>
-
-<div>
-<div id="userName">User</div>
-<div id="userEmail" style="font-size:12px;color:#94a3b8"></div>
-</div>
+<div onclick="showSection('dashboard')">Dashboard</div>
+<div onclick="showSection('water')">Water Intake</div>
+<div onclick="showSection('steps')">Steps</div>
+<div onclick="showSection('sleep')">Sleep</div>
+<div onclick="showSection('exercise')">Exercise</div>
+<div onclick="showSection('analytics')">Analytics</div>
 
 </div>
 
-</div>
+<div class="main">
 
+<!-- DASHBOARD -->
 
-<div class="container">
+<div id="dashboard" class="section active">
 
-<h1>Hello, <span id="firstName">User</span> 👋</h1>
+<h2>Health Dashboard</h2>
 
-<div class="grid">
-
-<div>
+<div class="cards">
 
 <div class="card">
-
-<h3>Calories</h3>
-
-<h1 id="calories">2040 kcal</h1>
-
-<canvas id="chart"></canvas>
-
+<h4>Water Today</h4>
+<h2 id="waterStat">0 L</h2>
 </div>
 
 <div class="card">
+<h4>Steps</h4>
+<h2 id="stepsStat">0</h2>
+</div>
 
-<h3>Sleep</h3>
+<div class="card">
+<h4>Sleep</h4>
+<h2 id="sleepStat">0 hrs</h2>
+</div>
 
-<h1>7.5 hrs</h1>
+<div class="card">
+<h4>Weight</h4>
+<h2 id="weightStat">0 kg</h2>
+</div>
+
+</div>
+
+<div class="chart-box">
+<canvas id="healthChart"></canvas>
+</div>
+
+</div>
+
+<!-- WATER -->
+
+<div id="water" class="section">
+
+<h2>Water Intake</h2>
+
+<div class="form-row">
+<input id="waterAmount" placeholder="Litres">
+<button onclick="addWater()">Add</button>
+</div>
+
+</div>
+
+<!-- STEPS -->
+
+<div id="steps" class="section">
+
+<h2>Steps Tracker</h2>
+
+<div class="form-row">
+<input id="stepCount" placeholder="Steps">
+<button onclick="addSteps()">Add</button>
+</div>
+
+</div>
+
+<!-- SLEEP -->
+
+<div id="sleep" class="section">
+
+<h2>Sleep Tracker</h2>
+
+<div class="form-row">
+<input id="sleepHours" placeholder="Hours slept">
+<button onclick="addSleep()">Add</button>
+</div>
+
+</div>
+
+<!-- EXERCISE -->
+
+<div id="exercise" class="section">
+
+<h2>Exercise Log</h2>
+
+<div class="form-row">
+<input id="exerciseName" placeholder="Exercise">
+<input id="exerciseTime" placeholder="Minutes">
+<button onclick="addExercise()">Add</button>
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>Exercise</th>
+<th>Minutes</th>
+</tr>
+</thead>
+
+<tbody id="exerciseTable"></tbody>
+
+</table>
+
+</div>
+
+<!-- ANALYTICS -->
+
+<div id="analytics" class="section">
+
+<h2>Health Analytics</h2>
+
+<p>Your weekly health activity summary.</p>
 
 </div>
 
 </div>
 
-<div>
+<script>
 
-<div class="stats">
+/* NAVIGATION */
 
-<div class="stat">
-Heart Rate
-<h2>68 bpm</h2>
-</div>
+function showSection(id){
 
-<div class="stat">
-Weight
-<h2>76 kg</h2>
-</div>
-
-<div class="stat">
-Steps
-<h2>8421</h2>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script type="module">
-
-import {
-auth,
-onAuthStateChanged
-}
-from "./firebase.js";
-
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-const name=user.displayName;
-const email=user.email;
-
-userName.innerText=name;
-userEmail.innerText=email;
-avatar.innerText=name.charAt(0).toUpperCase();
-firstName.innerText=name.split(" ")[0];
-
-}
-
+document.querySelectorAll(".section").forEach(s=>{
+s.classList.remove("active");
 });
 
-new Chart(document.getElementById("chart"),{
+document.getElementById(id).classList.add("active");
+
+}
+
+/* WATER */
+
+function addWater(){
+
+let water=document.getElementById("waterAmount").value;
+
+document.getElementById("waterStat").innerText=water+" L";
+
+}
+
+/* STEPS */
+
+function addSteps(){
+
+let steps=document.getElementById("stepCount").value;
+
+document.getElementById("stepsStat").innerText=steps;
+
+}
+
+/* SLEEP */
+
+function addSleep(){
+
+let sleep=document.getElementById("sleepHours").value;
+
+document.getElementById("sleepStat").innerText=sleep+" hrs";
+
+}
+
+/* EXERCISE */
+
+function addExercise(){
+
+let name=document.getElementById("exerciseName").value;
+let time=document.getElementById("exerciseTime").value;
+
+let table=document.getElementById("exerciseTable");
+
+table.innerHTML+=`
+<tr>
+<td>${name}</td>
+<td>${time}</td>
+</tr>
+`;
+
+}
+
+/* CHART */
+
+new Chart(document.getElementById("healthChart"),{
 
 type:"line",
 
 data:{
 labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
 datasets:[{
-data:[1800,2000,2100,1900,2200,2400,2040],
-borderColor:"#3b82f6"
+label:"Steps",
+data:[5000,7000,8000,6500,9000,10000,7500],
+borderColor:"#34d399",
+tension:0.4
 }]
 }
 
