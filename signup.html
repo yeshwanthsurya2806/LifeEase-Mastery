@@ -1,60 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Sign Up - LifeEase</title>
-<style>
-body{
-background:#050810;
-color:white;
-font-family:sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-.box{
-background:rgba(255,255,255,0.05);
-padding:40px;
-border-radius:10px;
-text-align:center;
-}
-button{
-padding:12px 24px;
-font-size:16px;
-cursor:pointer;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Signup - LifeEase</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-<div class="box">
-<h1>Create Account</h1>
-<button id="signupBtn">Sign up with Google</button>
-<p>Already have account? <a href="login.html">Login</a></p>
-</div>
-
-<script type="module">
-
-import { auth, provider, signInWithPopup }
-from "./firebase.js";
-
-signupBtn.onclick = async () => {
-
-try{
-
-await signInWithPopup(auth, provider);
-
-window.location.href="dashboard.html";
-
-}
-catch(error){
-alert(error.message);
-}
-
-};
-
-</script>
-
+<body data-page="signup">
+  <main class="main-container" style="padding-top:140px; max-width:420px;">
+    <section class="glass" style="padding:26px;">
+      <h2>Create Account</h2>
+      <p class="small-text">Signup with email and password</p>
+      <div class="form-row" style="margin-top:14px; gap:12px;">
+        <input id="signupName" type="text" placeholder="Name" class="input" required>
+        <input id="signupEmail" type="email" placeholder="Email" class="input" required>
+        <input id="signupPassword" type="password" placeholder="Password" class="input" required>
+        <button type="button" id="submitSignup" class="btn btn-primary">Create Account</button>
+      </div>
+      <p style="margin-top:14px;">Already have an account? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+  <script type="module" src="./signup.js?v=6"></script>
 </body>
 </html>
