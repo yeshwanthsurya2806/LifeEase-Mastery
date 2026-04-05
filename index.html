@@ -1,355 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeEase | Health & Wealth</title>
-
-    <style>
-        :root {
-            --bg: #050810;
-            --card-glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --health-accent: #34d399;
-            --wealth-accent: #fbbf24;
-            --text-dim: #94a3b8;
-        }
-
-        body {
-            margin: 0;
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', system-ui, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, #111827 0%, #050810 100%);
-            z-index: -1;
-        }
-
-        .top-info {
-            text-align: center;
-            max-width: 800px;
-            margin-bottom: 60px;
-        }
-
-        .top-info h1 {
-            font-size: 3.5rem;
-            margin: 0;
-            background: linear-gradient(to right, #fff, #64748b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .top-info p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-        }
-
-        .pillar-container {
-            display: flex;
-            gap: 100px;
-            flex-wrap: wrap;
-        }
-
-        .pillar-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .pillar-diamond {
-            width: 320px;
-            height: 320px;
-            background: var(--card-glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            transform: rotate(45deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.5s;
-        }
-
-        .pillar-content {
-            transform: rotate(-45deg);
-            text-align: center;
-        }
-
-        .pillar-diamond:hover {
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        .health-pillar {
-            border-left: 6px solid var(--health-accent);
-        }
-
-        .wealth-pillar {
-            border-right: 6px solid var(--wealth-accent);
-        }
-
-        .tags {
-            margin-top: 10px;
-        }
-
-        .tag {
-            font-size: 12px;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            margin: 3px;
-            display: inline-block;
-        }
-
-        /* NAVBAR */
-
-        .top-nav {
-            position: fixed;
-            top: 20px;
-            right: 30px;
-        }
-
-        .nav-right {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            text-decoration: none;
-            color: white;
-            font-size: 14px;
-        }
-
-        .btn-solid {
-            background: #020617;
-            cursor: pointer;
-        }
-
-        .btn-solid:hover {
-            background: #1e293b;
-        }
-
-        /* Welcome Section */
-
-.welcome-section{
-margin-top:60px;
-max-width:1000px;
-text-align:center;
-}
-
-.welcome-section h2{
-font-size:2rem;
-margin-bottom:10px;
-background:linear-gradient(to right,#34d399,#fbbf24);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.welcome-sub{
-color:var(--text-dim);
-margin-bottom:40px;
-font-size:1.1rem;
-}
-
-/* Feature cards */
-
-.feature-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-}
-
-.feature-card{
-background:rgba(255,255,255,0.03);
-border:1px solid var(--border);
-padding:20px;
-border-radius:15px;
-transition:0.3s;
-}
-
-.feature-card:hover{
-transform:translateY(-5px);
-background:rgba(255,255,255,0.06);
-}
-
-/* Quote */
-
-.quote{
-margin-top:40px;
-font-size:1.3rem;
-color:#34d399;
-font-weight:600;
-}
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeEase – Smart Life & Finance Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-    <!-- NAVBAR -->
-    <nav class="top-nav">
-        <div class="nav-right">
-
-            <a href="signup.html" id="signupBtn" class="btn">Sign up</a>
-
-            <a href="login.html" id="loginBtn" class="btn btn-solid">Log in</a>
-
-            <span id="userName" class="btn"></span>
-
-            <a href="#" id="logoutBtn" class="btn btn-solid" style="display:none;">Logout</a>
-
-        </div>
-    </nav>
-
-
-    <div class="bg-glow"></div>
-
-    <header class="top-info">
-        <h1>LifeEase Mastery</h1>
-        <p>
-            Two pillars, one seamless life. Optimize health and wealth.
-        </p>
-    </header>
-
-
-    <div class="pillar-container">
-
-        <a href="health.html" class="pillar-link">
-            <div class="pillar-diamond health-pillar">
-                <div class="pillar-content">
-                    <h2>Health</h2>
-                    <p>Track wellness and habits</p>
-                    <div class="tags">
-                        <span class="tag">Habits</span>
-                        <span class="tag">Wellness</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-
-
-        <a href="wealth.html" class="pillar-link">
-            <div class="pillar-diamond wealth-pillar">
-                <div class="pillar-content">
-                    <h2>Wealth</h2>
-                    <p>Track finance and growth</p>
-                    <div class="tags">
-                        <span class="tag">Finance</span>
-                        <span class="tag">Growth</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-
+<body data-page="index">
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">LifeEase</div>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html" data-page="home">Home</a>
+        <a class="nav-link" href="dashboard.html" data-page="dashboard">Dashboard</a>
+        <a class="nav-link" href="wealth.html" data-page="wealth">Wealth</a>
+        <a class="nav-link" href="health.html" data-page="health">Health</a>
+      </div>
     </div>
-    <!-- Welcome Section -->
-<section class="welcome-section">
-
-    <h2 id="welcomeText">Welcome to Your Personal Mastery Hub</h2>
-
-    <p class="welcome-sub">
-        Transform your daily habits into powerful systems. LifeEase helps you build
-        unstoppable health and unstoppable wealth with intelligent tracking and insights.
-    </p>
-
-    <div class="feature-grid">
-
-        <div class="feature-card">
-            <h3>📊 Smart Tracking</h3>
-            <p>Monitor habits, finances, and progress in real time.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>🎯 Goal Focus</h3>
-            <p>Stay aligned with your long-term health and financial vision.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>⚡ Productivity Boost</h3>
-            <p>Optimize your time, energy, and performance daily.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>🔒 Secure & Private</h3>
-            <p>Your personal growth data is fully protected and private.</p>
-        </div>
-
+    <div id="authControls" class="nav-right">
+      <a class="btn" href="login.html">Login</a>
+      <a class="btn btn-primary" href="signup.html">Signup</a>
     </div>
+  </nav>
 
-    <div class="quote">
-        "Master your habits. Master your money. Master your life."
-    </div>
+  <main class="main-container">
+    <section class="glass" style="padding:32px;">
+      <h1 id="welcomeUser">Hello, build your smart life with LifeEase</h1>
+      <p class="small-text">A modern AI-assisted productivity and financial dashboard for students, professionals and families. Switch to data-driven decisions and keep your goals on track.</p>
+      <div class="grid grid-2" style="margin-top:20px;">
+        <div class="feature-card">
+          <h3>📌 All-in-one control center</h3>
+          <p>Expense tracking + investments + health habits + insights all in one place.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📈 Smart analytics engine</h3>
+          <p>Get AI-like insights: weekly trends, category alerts, and goal progress.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🔐 Secure Auth</h3>
+          <p>Firebase email/password login with session-based local data storage.</p>
+        </div>
+        <div class="feature-card">
+          <h3>⚡ Clean responsive UI</h3>
+          <p>Glassmorphism theme, mobile-friendly layout, dark/light toggle, animations.</p>
+        </div>
+      </div>
+      <div class="page-header" style="margin-top:24px;">
+        <a class="btn btn-primary" href="dashboard.html">Enter Dashboard</a>
+        <button id="themeToggle" class="btn">Toggle Light/Dark</button>
+      </div>
+    </section>
 
-</section>
+    <section class="feature-grid">
+      <article class="feature-card">
+        <h3>💳 Finance Module</h3>
+        <p>Expenses, subscriptions, investments and goals with CSV export and analytics.</p>
+      </article>
+      <article class="feature-card">
+        <h3>🏥 Health Module</h3>
+        <p>Water, steps, sleep, workout, BMI and weekly health score tracking.</p>
+      </article>
+      <article class="feature-card">
+        <h3>🧠 Insights Engine</h3>
+        <p>Auto spending messages, savings recommendations, and smart overtime analysis.</p>
+      </article>
+      <article class="feature-card">
+        <h3>🛠️ Career ready</h3>
+        <p>Designed for portfolio and internship evaluation: clean, modular, end-to-end.</p>
+      </article>
+    </section>
+  </main>
 
-
-
-<script type="module">
-
-import {
-auth,
-onAuthStateChanged,
-signOut
-}
-from "./firebase.js";
-
-
-const userName = document.getElementById("userName");
-const logoutBtn = document.getElementById("logoutBtn");
-const loginBtn = document.getElementById("loginBtn");
-const signupBtn = document.getElementById("signupBtn");
-
-
-onAuthStateChanged(auth, (user) => {
-
-if(user){
-
-userName.innerText = user.displayName || user.email;
-
-logoutBtn.style.display = "inline-block";
-
-loginBtn.style.display = "none";
-signupBtn.style.display = "none";
-
-}
-else{
-
-userName.innerText = "";
-
-logoutBtn.style.display = "none";
-
-loginBtn.style.display = "inline-block";
-signupBtn.style.display = "inline-block";
-
-}
-
-});
-
-
-logoutBtn.onclick = async () => {
-
-await signOut(auth);
-
-location.reload();
-
-};
-
-</script>
-
-
+  <script type="module" src="script.js?v=6"></script>
 </body>
 </html>
