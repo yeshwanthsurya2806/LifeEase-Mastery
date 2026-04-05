@@ -1,364 +1,70 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LifeEase Health</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-
-:root{
---bg:#050810;
---card:rgba(255,255,255,0.05);
---border:rgba(255,255,255,0.1);
---accent:#34d399;
---textDim:#94a3b8;
-}
-
-*{
-box-sizing:border-box;
-font-family:Inter, sans-serif;
-}
-
-body{
-margin:0;
-background:var(--bg);
-color:white;
-display:flex;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-width:220px;
-background:#020617;
-height:100vh;
-padding:25px;
-border-right:1px solid var(--border);
-}
-
-.logo{
-font-size:22px;
-font-weight:700;
-color:var(--accent);
-margin-bottom:30px;
-}
-
-.sidebar div{
-padding:10px 0;
-cursor:pointer;
-color:#cbd5f5;
-transition:0.3s;
-}
-
-.sidebar div:hover{
-color:var(--accent);
-transform:translateX(5px);
-}
-
-/* MAIN */
-
-.main{
-flex:1;
-padding:30px;
-}
-
-.section{
-display:none;
-}
-
-.section.active{
-display:block;
-}
-
-/* CARDS */
-
-.cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-margin-bottom:25px;
-}
-
-.card{
-background:var(--card);
-padding:20px;
-border-radius:10px;
-border:1px solid var(--border);
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-/* FORMS */
-
-.form-row{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:15px;
-}
-
-input{
-padding:10px;
-background:#020617;
-border:1px solid var(--border);
-color:white;
-border-radius:5px;
-}
-
-button{
-padding:10px 16px;
-background:var(--accent);
-border:none;
-cursor:pointer;
-border-radius:5px;
-font-weight:bold;
-}
-
-/* TABLE */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th,td{
-padding:10px;
-border-bottom:1px solid var(--border);
-text-align:left;
-}
-
-/* CHART SIZE */
-
-.chart-box{
-max-width:420px;
-margin-top:20px;
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LifeEase Health</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-<div class="sidebar">
-
-<div class="logo">LifeEase</div>
-
-<div onclick="showSection('dashboard')">Dashboard</div>
-<div onclick="showSection('water')">Water Intake</div>
-<div onclick="showSection('steps')">Steps</div>
-<div onclick="showSection('sleep')">Sleep</div>
-<div onclick="showSection('exercise')">Exercise</div>
-<div onclick="showSection('analytics')">Analytics</div>
-
-</div>
-
-<div class="main">
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" class="section active">
-
-<h2>Health Dashboard</h2>
-
-<div class="cards">
-
-<div class="card">
-<h4>Water Today</h4>
-<h2 id="waterStat">0 L</h2>
-</div>
-
-<div class="card">
-<h4>Steps</h4>
-<h2 id="stepsStat">0</h2>
-</div>
-
-<div class="card">
-<h4>Sleep</h4>
-<h2 id="sleepStat">0 hrs</h2>
-</div>
-
-<div class="card">
-<h4>Weight</h4>
-<h2 id="weightStat">0 kg</h2>
-</div>
-
-</div>
-
-<div class="chart-box">
-<canvas id="healthChart"></canvas>
-</div>
-
-</div>
-
-<!-- WATER -->
-
-<div id="water" class="section">
-
-<h2>Water Intake</h2>
-
-<div class="form-row">
-<input id="waterAmount" placeholder="Litres">
-<button onclick="addWater()">Add</button>
-</div>
-
-</div>
-
-<!-- STEPS -->
-
-<div id="steps" class="section">
-
-<h2>Steps Tracker</h2>
-
-<div class="form-row">
-<input id="stepCount" placeholder="Steps">
-<button onclick="addSteps()">Add</button>
-</div>
-
-</div>
-
-<!-- SLEEP -->
-
-<div id="sleep" class="section">
-
-<h2>Sleep Tracker</h2>
-
-<div class="form-row">
-<input id="sleepHours" placeholder="Hours slept">
-<button onclick="addSleep()">Add</button>
-</div>
-
-</div>
-
-<!-- EXERCISE -->
-
-<div id="exercise" class="section">
-
-<h2>Exercise Log</h2>
-
-<div class="form-row">
-<input id="exerciseName" placeholder="Exercise">
-<input id="exerciseTime" placeholder="Minutes">
-<button onclick="addExercise()">Add</button>
-</div>
-
-<table>
-
-<thead>
-<tr>
-<th>Exercise</th>
-<th>Minutes</th>
-</tr>
-</thead>
-
-<tbody id="exerciseTable"></tbody>
-
-</table>
-
-</div>
-
-<!-- ANALYTICS -->
-
-<div id="analytics" class="section">
-
-<h2>Health Analytics</h2>
-
-<p>Your weekly health activity summary.</p>
-
-</div>
-
-</div>
-
-<script>
-
-/* NAVIGATION */
-
-function showSection(id){
-
-document.querySelectorAll(".section").forEach(s=>{
-s.classList.remove("active");
-});
-
-document.getElementById(id).classList.add("active");
-
-}
-
-/* WATER */
-
-function addWater(){
-
-let water=document.getElementById("waterAmount").value;
-
-document.getElementById("waterStat").innerText=water+" L";
-
-}
-
-/* STEPS */
-
-function addSteps(){
-
-let steps=document.getElementById("stepCount").value;
-
-document.getElementById("stepsStat").innerText=steps;
-
-}
-
-/* SLEEP */
-
-function addSleep(){
-
-let sleep=document.getElementById("sleepHours").value;
-
-document.getElementById("sleepStat").innerText=sleep+" hrs";
-
-}
-
-/* EXERCISE */
-
-function addExercise(){
-
-let name=document.getElementById("exerciseName").value;
-let time=document.getElementById("exerciseTime").value;
-
-let table=document.getElementById("exerciseTable");
-
-table.innerHTML+=`
-<tr>
-<td>${name}</td>
-<td>${time}</td>
-</tr>
-`;
-
-}
-
-/* CHART */
-
-new Chart(document.getElementById("healthChart"),{
-
-type:"line",
-
-data:{
-labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-datasets:[{
-label:"Steps",
-data:[5000,7000,8000,6500,9000,10000,7500],
-borderColor:"#34d399",
-tension:0.4
-}]
-}
-
-});
-
-</script>
-
+<body data-page="health" style="min-height:100vh;">
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">LifeEase</div>
+      <div class="nav-links">
+        <a class="nav-link" href="dashboard.html" data-page="dashboard">Dashboard</a>
+        <a class="nav-link" href="wealth.html" data-page="wealth">Wealth</a>
+        <a class="nav-link" href="health.html" data-page="health">Health</a>
+      </div>
+    </div>
+    <div class="nav-right" style="gap:12px; align-items:center;">
+      <div id="userAvatar" class="user-avatar">G</div>
+      <div id="userProfile" style="display:flex;flex-direction:column; align-items:flex-end;font-size:0.85rem;text-align:right;line-height:1.1;">
+        <strong id="userName">Guest</strong>
+        <span id="userEmail">Please login</span>
+      </div>
+      <button id="logoutBtn" class="btn">Logout</button>
+      <button id="themeToggle" class="btn">Theme</button>
+    </div>
+  </nav>
+
+  <main class="main-container" style="padding-top:120px;">
+    <section class="section-title">Health Dashboard</section>
+    <div class="grid grid-4" style="margin-bottom:20px;">
+      <article class="card"><h4>Water Today</h4><p id="waterStat" class="stat">0 L</p></article>
+      <article class="card"><h4>Steps</h4><p id="stepsStat" class="stat">0</p></article>
+      <article class="card"><h4>Sleep</h4><p id="sleepStat" class="stat">0 hrs</p></article>
+      <article class="card"><h4>Health Score</h4><p id="healthScore" class="stat">0 / 100</p></article>
+    </div>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h3>Daily intake</h3>
+      <div class="form-row" style="margin-top:10px; gap:10px;">
+        <input id="waterAmount" class="input" placeholder="Litres" type="number" min="0" step="0.1"><button class="btn btn-primary" onclick="addWater()">Add Water</button>
+        <input id="stepCount" class="input" placeholder="Steps" type="number" min="0"><button class="btn btn-primary" onclick="addSteps()">Add Steps</button>
+        <input id="sleepHours" class="input" placeholder="Sleep (hrs)" type="number" min="0" step="0.1"><button class="btn btn-primary" onclick="addSleep()">Add Sleep</button>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h3>Workout</h3>
+      <div class="form-row" style="margin-top:10px; gap:10px;">
+        <input id="exerciseName" class="input" placeholder="Exercise">
+        <input id="exerciseTime" class="input" placeholder="Minutes" type="number" min="0">
+        <button class="btn btn-primary" onclick="addExercise()">Add</button>
+      </div>
+      <div class="table-wrap" style="margin-top:12px;"><table><thead><tr><th>Exercise</th><th>Minutes</th></tr></thead><tbody id="exerciseTable"></tbody></table></div>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;"><h3>BMI Calculator</h3><div class="form-row" style="margin-top:10px; gap:10px;"><input id="bmiWeight" class="input" placeholder="Weight (kg)" type="number" min="0" step="0.1"><input id="bmiHeight" class="input" placeholder="Height (cm)" type="number" min="0" step="0.1"><button class="btn btn-primary" onclick="calculateBMI()">Calculate BMI</button></div><p id="bmiResult" class="small-text" style="margin-top:10px;">No BMI computed yet</p></section>
+<section class="card" style="margin-bottom:18px;">
+      <h3>Analytics</h3>
+      <div class="chart-box" style="height:260px;"><canvas id="healthChart"></canvas></div>
+    </section>
+
+  </main>
+
+  <script type="module" src="script.js?v=6"></script>
 </body>
 </html>
+
