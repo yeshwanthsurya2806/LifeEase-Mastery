@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LifeEase Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="dashboard">
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">LifeEase</div>
+      <div class="nav-links">
+        <a class="nav-link" href="dashboard.html" data-page="dashboard">Dashboard</a>
+        <a class="nav-link" href="wealth.html" data-page="wealth">Wealth</a>
+        <a class="nav-link" href="health.html" data-page="health">Health</a>
+      </div>
+    </div>
+    <div class="nav-right" style="gap: 12px; align-items:center;">
+      <div id="userAvatar" class="user-avatar">G</div>
+      <div id="userProfile" style="display:flex; flex-direction:column; align-items:flex-end; font-size:0.85rem; text-align:right; line-height:1.1;">
+        <strong id="userName">Guest</strong>
+        <span id="userEmail">Please login</span>
+      </div>
+      <button id="logoutBtn" class="btn">Logout</button>
+      <button id="themeToggle" class="btn">Theme</button>
+    </div>
+  </nav>
+
+  <main class="main-container">
+    <section class="page-header">
+      <h1>Control Center</h1>
+      <small class="small-text" id="insightsText">Insights load after login...</small>
+    </section>
+
+    <section class="grid grid-4">
+      <article class="card"><h4>Account Balance</h4><p id="accountBalance" class="stat">₹0</p></article>
+      <article class="card"><h4>Monthly Spending</h4><p id="monthlySpending" class="stat">₹0</p></article>
+      <article class="card"><h4>Investment Value</h4><p id="investmentValue" class="stat">₹0</p></article>
+      <article class="card"><h4>Health Score</h4><p id="healthScore" class="stat">0 / 100</p></article>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h3>Quick Actions</h3>
+      <div class="grid grid-3" style="margin-top:10px;">
+        <div><input id="dashAmount" class="input" placeholder="Amount" type="number" min="0"><input id="dashCategory" class="input" placeholder="Category"><input id="dashSubCategory" class="input" placeholder="Sub-category"><input id="dashDate" class="input" type="date"><select id="dashMode" class="input"><option>UPI</option><option>Card</option><option>Cash</option></select><button id="addExpenseBtn" class="btn btn-primary" style="width:100%;" onclick="window.addExpenseFromDash()">Add Expense</button></div>
+        <div><input id="dashGoalName" class="input" placeholder="Goal Name"><input id="dashGoalTarget" class="input" placeholder="Target Amount" type="number" min="0"><button id="addGoalBtn" class="btn btn-primary" style="width:100%;" onclick="window.addGoalFromDash()">Add Goal</button></div>
+        <div><button id="exportCsvBtn" class="btn" onclick="window.exportExpensesCsv()">Export Expenses CSV</button></div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h3>Recent Transactions</h3>
+      <div id="recentTransactions" class="grid" style="margin-top:10px; min-height:60px;"></div>
+    </section>
+
+    <section class="grid grid-2" style="margin-top:16px; min-height: 320px; gap:16px;">
+      <article class="card"><h3>Expense Breakdown</h3><div class="chart-box" style="height:260px;"><canvas id="expensePie"></canvas></div></article>
+      <article class="card"><h3>Monthly Trend</h3><div class="chart-box" style="height:260px;"><canvas id="monthlyTrend"></canvas></div></article>
+    </section>
+  </main>
+
+  <script type="module" src="./dashboard.js?v=6"></script>
+</body>
+</html>
